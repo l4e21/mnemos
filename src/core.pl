@@ -1,0 +1,40 @@
+:- module(core, [notes/2, book/2]).
+    
+:- discontiguous book/2.
+:- discontiguous notes/2.
+
+%% Remember: Predicates are Protocols
+%% Remember: We can destructure predicates to abstract arity
+
+%% Simulation and Simulacra by Jean Baudrillard
+book("Simulation and Simulacra",
+     _{author:"Jean Baudrillard",
+       tags:["philosophy"],
+       style:_{fontsize:14, subnodes:broken}}).
+
+author("Jean Baudrillard", []).
+
+
+notes("Simulation and Simulacra",
+      [
+          h1("The procession of Simulacra", _{}),
+          text([quote("The simulacrum is never what hides the truth -
+                it is truth that hides the fact that there is none. The
+                simulacrum is true."),
+                text("- Ecclesiastes", _{ref:["bible", "ecclesiastes"]})],
+               _{tags:["christianity"]}),
+          text("Coextensivity of the real and its concept is imaginary"),
+          text("The real is produced from miniaturized cells, matrices, and 
+memory banks, models of control - and it can be reproduced an indefinite number of times from these. It no longer needs to be rational, because it no longer measures itself against either an ideal or negative instance. It is no longer anything but operational."),
+          text("Interpretation-- The system is the point from which we produce 'reality', and as long as the system is functional, what happens in reality does not matter except in the same way that it might suck if a map is wrong"),
+          h1("The Divine Irreverence of Images")
+      ]).
+
+%% Simultaneous Statistical Inference
+book("Simultaneous Statistical Inference", _{tags:["maths"]}).
+notes("Simulteanous Statistical Inference",
+      [
+          h1("Intro"),
+          text("In simultaneous statistical inference, we have less hypotheses than data-sets, I.E., a singular hypothesis may talk about multiple datasets."),
+          text("This can mean that in multiple comparison, a decision is not only made between H_0 and not H_0, but also between all possible combinations")
+      ]).
