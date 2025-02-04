@@ -1,11 +1,17 @@
 :- module(render, [render/3, write_notes_to_html/1]).
 
-%% Global Styles. ID, ClassName, Meta
-style(h2, "h2", _{fontsize:"18px"}).
-style(h1, "h1", _{color:"red", fontsize: "18px"}).
-style(text, ".text", _{fontsize:"12px"}).
-style(quote, ".quote", _{implements:text, fontstyles:[italics]}).
-style(img, "img", _{}).
+%% Global Styles
+style(h2,
+      _{fontsize:"18px", element: "h2"}).
+style(h1,
+      _{color:"red", fontsize: "18px", element:"h1"}).
+style(text,
+      _{fontsize:"12px", type:class, element: "p", classname: ".text"}).
+style(quote,
+      _{implements:text, fontstyles:[italics], element:"a", classname:".quote"}).
+style(img,
+      _{element:"img"}).
+
 
 enclose_in_tags(Tag, Depth, Content, Result) :-
     format(string(Result),
@@ -38,16 +44,18 @@ render_as_css_aux(K-V, Acc, AccNew) :-
 
 render_as_css_aux(_-_, Acc, Acc).
 
-render_as_css(ClassName, StyleOpts, CSS) :-
+render_as_css(StyleOpts, CSS) :-
+    (get_dict(classname, StyleOpts, StyleName), !;
+     get_dict(element, StyleOpts, StyleName), !),
     dict_pairs(StyleOpts, _, StylePairs),
     foldl(render_as_css_aux, StylePairs, "", StyleString),
-    format(string(CSS), "~w {\n~w}\n", [ClassName, StyleString]).
+    format(string(CSS), "~w {\n~w}\n", [StyleName, StyleString]).
 
 html_header_aux(StyleList, StyleString) :-
     foldl(string_concat, StyleList, "", StyleString).
     
 html_header(HtmlHeader) :-
-    findall(CSS, (style(_, ClassName, StyleOpts), render_as_css(ClassName, StyleOpts, CSS)), StyleList),
+    findall(CSS, (style(_, Meta), render_as_css(Meta, CSS)), StyleList),
     html_header_aux(StyleList, StyleString),
     enclose_in_tags("style", 0, StyleString, HtmlHeader).
 
@@ -61,33 +69,55 @@ render(Name, Html, CtxStyleOpts) :-
     format(string(Html), "<html>\n<head>\n~w</head>\n<body>\n~w</body>\n</html>",
            [HtmlHeader, HtmlBody]).
 
-%% Specific Nodes
-render(h1(S, Meta), Html, CtxStyleOpts, Depth) :-
-    style_opts(Meta, CtxStyleOpts, StyleOpts),
+render(Term, Html, CtxStyleOpts, Depth) :-
+    compound(Term),
+    compound_name_arguments(Term, P, [S, NodeMeta]),
+    style(P, StyleMeta),
+    get_dict(element, StyleMeta, Element),
+
+    style_opts(NodeMeta, CtxStyleOpts, StyleOpts),
+    
     Depth1 is Depth+1,
     render(S, SubHtml, StyleOpts, Depth1),
-    enclose_in_tags("h1", Depth, SubHtml, Html).
+    
+    (get_dict(classname, StyleMeta, ClassNameWithDots) ->
+         split_string(ClassNameWithDots, ".", "", ClassNameSplitList),
+         last(ClassNameSplitList, ClassName),
+         enclose_in_tags(Element, ClassName, Depth, SubHtml, Html);
+    enclose_in_tags(Element, Depth, SubHtml, Html)).
 
-render(h1(S), Html, CtxStyleOpts, Depth) :-
-    render(h1(S, _{}), Html, CtxStyleOpts, Depth).
+render(Term, Html, CtxStyleOpts, Depth) :-
+    compound(Term),
+    compound_name_arguments(Term, P, [S]),    
+    compound_name_arguments(NewTerm, P, [S, _{}]),    
+    render(NewTerm, Html, CtxStyleOpts, Depth).
 
-render(text(S, Meta), Html, CtxStyleOpts, Depth) :-
-    style_opts(Meta, CtxStyleOpts, StyleOpts),
-    Depth1 is Depth+1,
-    render(S, SubHtml, StyleOpts, Depth1),
-    enclose_in_tags("p", "text", Depth, SubHtml, Html).
+%% render(h1(S, Meta), Html, CtxStyleOpts, Depth) :-
+%%     style_opts(Meta, CtxStyleOpts, StyleOpts),
+%%     Depth1 is Depth+1,
+%%     render(S, SubHtml, StyleOpts, Depth1),
+%%     enclose_in_tags("h1", Depth, SubHtml, Html).
 
-render(text(S), Html, CtxStyleOpts, Depth) :-
-    render(text(S, _{}), Html, CtxStyleOpts, Depth).
+%% render(h1(S), Html, CtxStyleOpts, Depth) :-
+%%     render(h1(S, _{}), Html, CtxStyleOpts, Depth).
 
-render(quote(S, Meta), Html, CtxStyleOpts, Depth) :-
-    style_opts(Meta, CtxStyleOpts, StyleOpts),
-    Depth1 is Depth+1,
-    render(S, SubHtml, StyleOpts, Depth1),
-    enclose_in_tags("a", Depth, SubHtml, Html).
+%% render(text(S, Meta), Html, CtxStyleOpts, Depth) :-
+%%     style_opts(Meta, CtxStyleOpts, StyleOpts),
+%%     Depth1 is Depth+1,
+%%     render(S, SubHtml, StyleOpts, Depth1),
+%%     enclose_in_tags("p", "text", Depth, SubHtml, Html).
 
-render(quote(S), Html, CtxStyleOpts, Depth) :-
-    render(quote(S, _{}), Html, CtxStyleOpts, Depth).
+%% render(text(S), Html, CtxStyleOpts, Depth) :-
+%%     render(text(S, _{}), Html, CtxStyleOpts, Depth).
+
+%% render(quote(S, Meta), Html, CtxStyleOpts, Depth) :-
+%%     style_opts(Meta, CtxStyleOpts, StyleOpts),
+%%     Depth1 is Depth+1,
+%%     render(S, SubHtml, StyleOpts, Depth1),
+%%     enclose_in_tags("a", Depth, SubHtml, Html).
+
+%% render(quote(S), Html, CtxStyleOpts, Depth) :-
+%%     render(quote(S, _{}), Html, CtxStyleOpts, Depth).
 
 %% Lists
 render([], "", _, _).
