@@ -1,11 +1,11 @@
 :- module(render, [render/3, write_notes_to_html/1]).
 
-%% Global Styles
-style(h2, _{fontsize:"18px"}).
-style(h1, _{color:"red", fontsize: "18px"}).
-style(text, _{fontsize:"8px"}).
-style(quote, _{implements:text, fontstyles:[italics]}).
-style(img, _{}).
+%% Global Styles. ID, ClassName, Meta
+style(h2, "h2", _{fontsize:"18px"}).
+style(h1, "h1", _{color:"red", fontsize: "18px"}).
+style(text, ".text", _{fontsize:"12px"}).
+style(quote, ".quote", _{implements:text, fontstyles:[italics]}).
+style(img, "img", _{}).
 
 enclose_in_tags(Tag, Depth, Content, Result) :-
     format(string(Result),
@@ -38,17 +38,16 @@ render_as_css_aux(K-V, Acc, AccNew) :-
 
 render_as_css_aux(_-_, Acc, Acc).
 
-render_as_css(N, StyleOpts, CSS) :-
-    atom_string(N, S),
+render_as_css(ClassName, StyleOpts, CSS) :-
     dict_pairs(StyleOpts, _, StylePairs),
     foldl(render_as_css_aux, StylePairs, "", StyleString),
-    format(string(CSS), "~w {\n~w}\n", [S, StyleString]).
+    format(string(CSS), "~w {\n~w}\n", [ClassName, StyleString]).
 
 html_header_aux(StyleList, StyleString) :-
     foldl(string_concat, StyleList, "", StyleString).
     
 html_header(HtmlHeader) :-
-    findall(CSS, (style(N, StyleOpts), render_as_css(N, StyleOpts, CSS)), StyleList),
+    findall(CSS, (style(_, ClassName, StyleOpts), render_as_css(ClassName, StyleOpts, CSS)), StyleList),
     html_header_aux(StyleList, StyleString),
     enclose_in_tags("style", 0, StyleString, HtmlHeader).
 
