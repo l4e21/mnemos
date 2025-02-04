@@ -1,5 +1,5 @@
 
-* TODO
+* TODOLIST
 
 ** DONE Get PROLOG to produce html from notes
 ** TODO Consider Unit Tests
@@ -10,10 +10,10 @@
 ** DONE Come up with a better string formatting solution
 ** DONE Consider Modules
 ** DONE Add depth-based indentation
-** TODO Abstract node-specific rendering and have basic rendering for nodes
+** DONE Abstract node-specific rendering and have basic rendering for nodes
+** DONE Consider interfaces & inheritance
+*** Certain protocols will need to check if the interface is implemented first.
 ** TODO Add inline styles
 ** TODO Consider embeddable img component
 ** TODO Consider embedded src component
-** TODO Consider interfaces & inheritance
-*** Certain protocols will need to check if the interface is implemented first.
 ** TODO Start working on learning XPCE for a GUI

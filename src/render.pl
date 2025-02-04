@@ -4,7 +4,7 @@
 style(h2,
       _{fontsize:"18px", element: "h2"}).
 style(h1,
-      _{color:"red", fontsize: "18px", element:"h1"}).
+      _{color:"red", inherits:h2, element: "h1"}).
 style(text,
       _{fontsize:"12px", type:class, element: "p", classname: ".text"}).
 style(quote,
@@ -44,10 +44,19 @@ render_as_css_aux(K-V, Acc, AccNew) :-
 
 render_as_css_aux(_-_, Acc, Acc).
 
-render_as_css(StyleOpts, CSS) :-
-    (get_dict(classname, StyleOpts, StyleName), !;
-     get_dict(element, StyleOpts, StyleName), !),
-    dict_pairs(StyleOpts, _, StylePairs),
+meta_with_inherit(Meta, WithInheritedMeta) :-
+    get_dict(inherits, Meta, InheritedTag),
+    style(InheritedTag, InheritedMeta),
+    put_dict(Meta, InheritedMeta, WithInheritedMeta),
+    !.
+
+meta_with_inherit(Meta, Meta).
+
+render_as_css(Meta, CSS) :-
+    meta_with_inherit(Meta, WithInheritedMeta),
+    (get_dict(classname, WithInheritedMeta, StyleName), !;
+     get_dict(element, WithInheritedMeta, StyleName), !),
+    dict_pairs(WithInheritedMeta, _, StylePairs),
     foldl(render_as_css_aux, StylePairs, "", StyleString),
     format(string(CSS), "~w {\n~w}\n", [StyleName, StyleString]).
 
@@ -66,21 +75,23 @@ render(Name, Html, CtxStyleOpts) :-
     style_opts(Meta, CtxStyleOpts, StyleOpts),
     render(Nodes, HtmlBody, StyleOpts, 0),
     html_header(HtmlHeader),
-    format(string(Html), "<html>\n<head>\n~w</head>\n<body>\n~w</body>\n</html>",
+    format(string(Html),
+           "<html>\n<head>\n~w</head>\n<body>\n~w</body>\n</html>",
            [HtmlHeader, HtmlBody]).
 
 render(Term, Html, CtxStyleOpts, Depth) :-
     compound(Term),
     compound_name_arguments(Term, P, [S, NodeMeta]),
     style(P, StyleMeta),
-    get_dict(element, StyleMeta, Element),
+    meta_with_inherit(StyleMeta, StyleMetaWithInherit),
+    get_dict(element, StyleMetaWithInherit, Element),
 
     style_opts(NodeMeta, CtxStyleOpts, StyleOpts),
     
     Depth1 is Depth+1,
     render(S, SubHtml, StyleOpts, Depth1),
     
-    (get_dict(classname, StyleMeta, ClassNameWithDots) ->
+    (get_dict(classname, StyleMetaWithInherit, ClassNameWithDots) ->
          split_string(ClassNameWithDots, ".", "", ClassNameSplitList),
          last(ClassNameSplitList, ClassName),
          enclose_in_tags(Element, ClassName, Depth, SubHtml, Html);
@@ -91,33 +102,6 @@ render(Term, Html, CtxStyleOpts, Depth) :-
     compound_name_arguments(Term, P, [S]),    
     compound_name_arguments(NewTerm, P, [S, _{}]),    
     render(NewTerm, Html, CtxStyleOpts, Depth).
-
-%% render(h1(S, Meta), Html, CtxStyleOpts, Depth) :-
-%%     style_opts(Meta, CtxStyleOpts, StyleOpts),
-%%     Depth1 is Depth+1,
-%%     render(S, SubHtml, StyleOpts, Depth1),
-%%     enclose_in_tags("h1", Depth, SubHtml, Html).
-
-%% render(h1(S), Html, CtxStyleOpts, Depth) :-
-%%     render(h1(S, _{}), Html, CtxStyleOpts, Depth).
-
-%% render(text(S, Meta), Html, CtxStyleOpts, Depth) :-
-%%     style_opts(Meta, CtxStyleOpts, StyleOpts),
-%%     Depth1 is Depth+1,
-%%     render(S, SubHtml, StyleOpts, Depth1),
-%%     enclose_in_tags("p", "text", Depth, SubHtml, Html).
-
-%% render(text(S), Html, CtxStyleOpts, Depth) :-
-%%     render(text(S, _{}), Html, CtxStyleOpts, Depth).
-
-%% render(quote(S, Meta), Html, CtxStyleOpts, Depth) :-
-%%     style_opts(Meta, CtxStyleOpts, StyleOpts),
-%%     Depth1 is Depth+1,
-%%     render(S, SubHtml, StyleOpts, Depth1),
-%%     enclose_in_tags("a", Depth, SubHtml, Html).
-
-%% render(quote(S), Html, CtxStyleOpts, Depth) :-
-%%     render(quote(S, _{}), Html, CtxStyleOpts, Depth).
 
 %% Lists
 render([], "", _, _).
