@@ -8,7 +8,9 @@ style(quote, _{implements:text, fontstyles:[italics]}).
 style(img, _{}).
 
 enclose_in_tags(Tag, Depth, Content, Result) :-
-    format(string(Result), "~*c<~w>\n~w~*c</~w>\n", [Depth, 32, Tag, Content, Depth, 32, Tag]).
+    format(string(Result),
+           "~*c<~w>\n~w~*c</~w>\n",
+           [Depth, 32, Tag, Content, Depth, 32, Tag]).
 
 %% Priority: Meta > Style Predicate > Context
 css_style_atom(fontsize-V, "font-size", V).
