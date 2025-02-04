@@ -1,0 +1,18 @@
+*TODO*
+
+* DONE Get PROLOG to produce html from notes
+* DONE Consider whether I need to do a message-passing system
+** I will probably separate GUI logic from knowledge representation and stick to explicit predicates. PROLOG is already extremely flexible so I don't think I'll be losing too much, especially given I'm probably keeping a lot of this stuff static.
+* DONE Consider ref component further
+* DONE Add CSS headers
+* DONE Come up with a better string formatting solution
+* DONE Consider Modules
+* TODO Add depth-based indentation
+* TODO Add inline styles
+* TODO Consider embeddable img component
+* TODO Consider embedded src component
+* TODO Consider interfaces & inheritance
+** Certain protocols will need to check if the interface is implemented first.
+* TODO Start working on learning XPCE for a GUI
+* TODO Abstract node-specific rendering and have basic rendering for nodes
+* TODO Consider Unit Tests
