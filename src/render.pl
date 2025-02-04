@@ -1,9 +1,9 @@
 :- module(render, [render/3, write_notes_to_html/1]).
 
 %% Global Styles
-style(h2, _{fontsize:18}).
-style(h1, _{color:red, fontsize: 18}).
-style(text, _{}).
+style(h2, _{fontsize:"18px"}).
+style(h1, _{color:"red", fontsize: "18px"}).
+style(text, _{fontsize:"8px"}).
 style(quote, _{implements:text, fontstyles:[italics]}).
 style(img, _{}).
 
@@ -12,15 +12,24 @@ enclose_in_tags(Tag, Depth, Content, Result) :-
            "~*c<~w>\n~w~*c</~w>\n",
            [Depth, 32, Tag, Content, Depth, 32, Tag]).
 
-%% Priority: Meta > Style Predicate > Context
-css_style_atom(fontsize-V, "font-size", V).
-css_style_atom(color-V, "color", V).
+enclose_in_tags(Tag, Class, Depth, Content, Result) :-
+    format(string(Result),
+           "~*c<~w class=\"~w\">\n~w~*c</~w>\n",
+           [Depth, 32, Tag, Class, Content, Depth, 32, Tag]).
 
-style_opts(Id, Meta, ContextOpts, StyleOpts) :-
-    (style(Id, Opts1); Opts1 = _{}),
-    (get_dict(style, Meta, Opts2); Opts2 = _{}),
-    put_dict(Opts2, Opts1, Opts3),
-    put_dict(Opts3, ContextOpts, StyleOpts).
+enclose_in_tags(Tag, Class, StyleString, Depth, Content, Result) :-
+    format(string(Result),
+           "~*c<~w class=\"~w\" style=\"~w\">\n~w~*c</~w>\n",
+           [Depth, 32, Tag, Class, StyleString, Content, Depth, 32, Tag]).
+
+
+%% Priority: Meta > Style Predicate > Context
+css_style_atom(fontsize-V, "font-size", V) :- !.
+css_style_atom(color-V, "color", V) :- !.
+
+style_opts(Meta, ContextOpts, StyleOpts) :-
+    (get_dict(style, Meta, MetaOpts); MetaOpts = _{}),
+    put_dict(MetaOpts, ContextOpts, StyleOpts).
 
 render_as_css_aux(K-V, Acc, AccNew) :-
     css_style_atom(K-V, KS, VS),
@@ -40,7 +49,6 @@ html_header_aux(StyleList, StyleString) :-
     
 html_header(HtmlHeader) :-
     findall(CSS, (style(N, StyleOpts), render_as_css(N, StyleOpts, CSS)), StyleList),
-    write(StyleList),
     html_header_aux(StyleList, StyleString),
     enclose_in_tags("style", 0, StyleString, HtmlHeader).
 
@@ -48,7 +56,7 @@ html_header(HtmlHeader) :-
 render(Name, Html, CtxStyleOpts) :-
     book(Name, Meta),
     notes(Name, Nodes),
-    style_opts(Name, Meta, CtxStyleOpts, StyleOpts),
+    style_opts(Meta, CtxStyleOpts, StyleOpts),
     render(Nodes, HtmlBody, StyleOpts, 0),
     html_header(HtmlHeader),
     format(string(Html), "<html>\n<head>\n~w</head>\n<body>\n~w</body>\n</html>",
@@ -56,7 +64,7 @@ render(Name, Html, CtxStyleOpts) :-
 
 %% Specific Nodes
 render(h1(S, Meta), Html, CtxStyleOpts, Depth) :-
-    style_opts(h1, Meta, CtxStyleOpts, StyleOpts),
+    style_opts(Meta, CtxStyleOpts, StyleOpts),
     Depth1 is Depth+1,
     render(S, SubHtml, StyleOpts, Depth1),
     enclose_in_tags("h1", Depth, SubHtml, Html).
@@ -65,16 +73,16 @@ render(h1(S), Html, CtxStyleOpts, Depth) :-
     render(h1(S, _{}), Html, CtxStyleOpts, Depth).
 
 render(text(S, Meta), Html, CtxStyleOpts, Depth) :-
-    style_opts(text, Meta, CtxStyleOpts, StyleOpts),
+    style_opts(Meta, CtxStyleOpts, StyleOpts),
     Depth1 is Depth+1,
     render(S, SubHtml, StyleOpts, Depth1),
-    enclose_in_tags("p", Depth, SubHtml, Html).
+    enclose_in_tags("p", "text", Depth, SubHtml, Html).
 
 render(text(S), Html, CtxStyleOpts, Depth) :-
     render(text(S, _{}), Html, CtxStyleOpts, Depth).
 
 render(quote(S, Meta), Html, CtxStyleOpts, Depth) :-
-    style_opts(quote, Meta, CtxStyleOpts, StyleOpts),
+    style_opts(Meta, CtxStyleOpts, StyleOpts),
     Depth1 is Depth+1,
     render(S, SubHtml, StyleOpts, Depth1),
     enclose_in_tags("a", Depth, SubHtml, Html).
