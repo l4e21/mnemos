@@ -10,7 +10,7 @@
 book("Simulation and Simulacra",
      _{author:"Jean Baudrillard",
        tags:["philosophy"],
-       style:_{fontsize:14, subnodes:broken}}).
+       style:_{fontsize:14}}).
 
 author("Jean Baudrillard", []).
 
@@ -32,7 +32,7 @@ memory banks, models of control - and it can be reproduced an indefinite number 
 
 %% Simultaneous Statistical Inference
 book("Simultaneous Statistical Inference", _{tags:["maths"]}).
-notes("Simulteanous Statistical Inference",
+notes("Simultaneous Statistical Inference",
       [
           h1("Intro"),
           text("In simultaneous statistical inference, we have less hypotheses than data-sets, I.E., a singular hypothesis may talk about multiple datasets."),

@@ -95,28 +95,32 @@ render(Term, Html, CtxStyleOpts, Depth) :-
          split_string(ClassNameWithDots, ".", "", ClassNameSplitList),
          last(ClassNameSplitList, ClassName),
          enclose_in_tags(Element, ClassName, Depth, SubHtml, Html);
-    enclose_in_tags(Element, Depth, SubHtml, Html)).
+     enclose_in_tags(Element, Depth, SubHtml, Html)),
+    !.
 
 render(Term, Html, CtxStyleOpts, Depth) :-
     compound(Term),
     compound_name_arguments(Term, P, [S]),    
     compound_name_arguments(NewTerm, P, [S, _{}]),    
-    render(NewTerm, Html, CtxStyleOpts, Depth).
+    render(NewTerm, Html, CtxStyleOpts, Depth),
+    !.
 
 %% Lists
-render([], "", _, _).
+render([], "", _, _) :- !.
 render([H|T], HtmlBody, CtxStyleOpts, Depth) :-
     render(H, Acc, CtxStyleOpts, Depth),
     render(T, HtmlBody2, CtxStyleOpts, Depth),
-    string_concat(Acc, HtmlBody2, HtmlBody).
+    string_concat(Acc, HtmlBody2, HtmlBody),
+    !.
 
 %% Basic strings
-render(S, SS, _, _) :- string(S), string_concat(S, "\n", SS).
+render(S, SS, _, _) :- string(S), string_concat(S, "\n", SS), !.
 
 %% Default is an error in the html
 render(S, E, _, _) :-
     term_string(S, SS),
-    format(string(E), "Failed to render: ~w\n", [SS]).
+    format(string(E), "Failed to render: ~w\n", [SS]),
+    !.
 
 write_notes_to_html(Name) :-
     render(Name, Html, _{}),
