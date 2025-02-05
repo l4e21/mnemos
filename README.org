@@ -17,3 +17,5 @@
 ** TODO Consider embeddable img component
 ** TODO Consider embedded src component
 ** TODO Start working on learning XPCE for a GUI
+** TODO Consider creating webserver to host all the html?
+*** Okay but why over just opening the html yourself?
