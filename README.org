@@ -13,7 +13,8 @@
 ** DONE Abstract node-specific rendering and have basic rendering for nodes
 ** DONE Consider interfaces & inheritance
 *** Certain protocols will need to check if the interface is implemented first.
-** TODO Add inline styles
+** DONE Add inline styles
+** TODO String parsing, contextual vals
 ** TODO Consider embeddable img component
 ** TODO Consider embedded src component
 ** TODO Start working on learning XPCE for a GUI
