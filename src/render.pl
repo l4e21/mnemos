@@ -6,7 +6,7 @@ style(h2,
 style(h1,
       _{color:"red", inherits:h2, element: "h1"}).
 style(text,
-      _{fontsize:"12px", type:class, element: "p", classname: ".text"}).
+      _{fontsize:"14px", type:class, element: "p", classname: ".text"}).
 style(quote,
       _{implements:text, fontstyles:[italics], element:"a", classname:".quote"}).
 style(img,
@@ -29,7 +29,6 @@ enclose_in_tags(Tag, Class, StyleString, Depth, Content, Result) :-
            [Depth, 32, Tag, Class, StyleString, Content, Depth, 32, Tag]).
 
 
-%% Priority: Meta > Style Predicate > Context
 css_style_atom(fontsize-V, "font-size", V) :- !.
 css_style_atom(color-V, "color", V) :- !.
 
@@ -59,7 +58,7 @@ meta_to_style_string(Meta, StyleString) :-
     dict_pairs(Meta, _, StylePairs),
     foldl(render_as_css_aux, StylePairs, "", StyleString).    
 
-render_as_css(Meta, CSS) :-
+render_style_as_css(Meta, CSS) :-
     meta_with_inherit(Meta, WithInheritedMeta),
     (get_dict(classname, WithInheritedMeta, StyleName), !;
      get_dict(element, WithInheritedMeta, StyleName), !),
@@ -70,7 +69,7 @@ html_header_aux(StyleList, StyleString) :-
     foldl(string_concat, StyleList, "", StyleString).
     
 html_header(HtmlHeader) :-
-    findall(CSS, (style(_, Meta), render_as_css(Meta, CSS)), StyleList),
+    findall(CSS, (style(_, Meta), render_style_as_css(Meta, CSS)), StyleList),
     html_header_aux(StyleList, StyleString),
     enclose_in_tags("style", 0, StyleString, HtmlHeader).
 
@@ -93,11 +92,14 @@ inline_css(Meta, StyleString) :-
 render(Term, Html, Ctx, Depth) :-
     compound(Term),
     compound_name_arguments(Term, P, [S, NodeMeta]),
+    
     style(P, StyleMeta),
     meta_with_inherit(StyleMeta, StyleMetaWithInherit),
     get_dict(element, StyleMetaWithInherit, Element),
+
     put_dict(NodeMeta, Ctx, CtxNew),
     inline_css(CtxNew, CSS),
+    
     Depth1 is Depth+1,
     render(S, SubHtml, CtxNew, Depth1),
     
@@ -113,7 +115,7 @@ render(Term, Html, Ctx, Depth) :-
 render(Term, Html, Ctx, Depth) :-
     compound(Term),
     compound_name_arguments(Term, P, [S]),    
-    compound_name_arguments(NewTerm, P, [S, _{}]),    
+    compound_name_arguments(NewTerm, P, [S, _{}]),
     render(NewTerm, Html, Ctx, Depth),
     !.
 
