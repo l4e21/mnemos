@@ -1,4 +1,4 @@
-:- module(core, [notes/2, book/2]).
+:- module(core, [notes/2, book/2, elem_overrides/2]).
     
 :- discontiguous book/2.
 :- discontiguous notes/2.
@@ -14,13 +14,15 @@ book("Simulation and Simulacra",
 
 author("Jean Baudrillard", []).
 
+elem_overrides("Simulation and Simulacra", _{h1:_{color:"red"}}).
+
 notes("Simulation and Simulacra",
       [
           h1("The Procession of Simulacra", _{}),
           p([a("The simulacrum is never what hides the truth -
                 it is truth that hides the fact that there is none. The
                 simulacrum is true."),
-             a("- Ecclesiastes", _{fontsize:16})],
+             a("- Ecclesiastes", _{fontsize:12})],
                _{tags:["christianity"], fontsize:14, class: "text"}),
           p("Coextensivity of the real and its concept is imaginary"),
           p("The real is produced from miniaturized cells, matrices, and 

@@ -14,6 +14,8 @@
 ** DONE Consider interfaces & inheritance
 *** Certain protocols will need to check if the interface is implemented first.
 ** DONE Add inline styles
+** TODO Rethink doc-level overrides
+** TODO Rethink custom elements
 ** TODO String parsing, contextual vals
 ** TODO Consider embeddable img component
 ** TODO Consider embedded src component
