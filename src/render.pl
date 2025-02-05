@@ -34,7 +34,7 @@ css_style_atom(fontsize-V, "font-size", V) :- !.
 css_style_atom(color-V, "color", V) :- !.
 
 style_opts(Meta, ContextOpts, StyleOpts) :-
-    (get_dict(style, Meta, MetaOpts); MetaOpts = _{}),
+    (get_dict(style, Meta, MetaOpts), !; MetaOpts = _{}),
     put_dict(MetaOpts, ContextOpts, StyleOpts).
 
 render_as_css_aux(K-V, Acc, AccNew) :-
