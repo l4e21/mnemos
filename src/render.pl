@@ -1,4 +1,4 @@
-:- module(render, [render/3, write_notes_to_html/1]).
+:- module(render, [render/2, write_notes_to_html/1]).
 
 %% Global Styles
 style(h2,
@@ -33,16 +33,19 @@ enclose_in_tags(Tag, Class, StyleString, Depth, Content, Result) :-
 css_style_atom(fontsize-V, "font-size", V) :- !.
 css_style_atom(color-V, "color", V) :- !.
 
-style_opts(Meta, ContextOpts, StyleOpts) :-
-    (get_dict(style, Meta, MetaOpts), !; MetaOpts = _{}),
-    put_dict(MetaOpts, ContextOpts, StyleOpts).
-
 render_as_css_aux(K-V, Acc, AccNew) :-
     css_style_atom(K-V, KS, VS),
     format(string(AccNew), "~w  ~w: ~w;\n", [Acc, KS, VS]),
     !.
 
 render_as_css_aux(_-_, Acc, Acc).
+
+render_as_css_aux_no_whitespace(K-V, Acc, AccNew) :-
+    css_style_atom(K-V, KS, VS),
+    format(string(AccNew), "~w~w: ~w;", [Acc, KS, VS]),
+    !.
+
+render_as_css_aux_no_whitespace(_-_, Acc, Acc).
 
 meta_with_inherit(Meta, WithInheritedMeta) :-
     get_dict(inherits, Meta, InheritedTag),
@@ -52,12 +55,15 @@ meta_with_inherit(Meta, WithInheritedMeta) :-
 
 meta_with_inherit(Meta, Meta).
 
+meta_to_style_string(Meta, StyleString) :-
+    dict_pairs(Meta, _, StylePairs),
+    foldl(render_as_css_aux, StylePairs, "", StyleString).    
+
 render_as_css(Meta, CSS) :-
     meta_with_inherit(Meta, WithInheritedMeta),
     (get_dict(classname, WithInheritedMeta, StyleName), !;
      get_dict(element, WithInheritedMeta, StyleName), !),
-    dict_pairs(WithInheritedMeta, _, StylePairs),
-    foldl(render_as_css_aux, StylePairs, "", StyleString),
+    meta_to_style_string(WithInheritedMeta, StyleString),
     format(string(CSS), "~w {\n~w}\n", [StyleName, StyleString]).
 
 html_header_aux(StyleList, StyleString) :-
@@ -68,48 +74,54 @@ html_header(HtmlHeader) :-
     html_header_aux(StyleList, StyleString),
     enclose_in_tags("style", 0, StyleString, HtmlHeader).
 
+html_body(Nodes, HtmlBody) :-
+    render(Nodes, HtmlBody, _{}, 0).
+
 %% Main entry for rendering notes
-render(Name, Html, CtxStyleOpts) :-
-    book(Name, Meta),
+render(Name, Html) :-
     notes(Name, Nodes),
-    style_opts(Meta, CtxStyleOpts, StyleOpts),
-    render(Nodes, HtmlBody, StyleOpts, 0),
     html_header(HtmlHeader),
+    html_body(Nodes, HtmlBody),
     format(string(Html),
            "<html>\n<head>\n~w</head>\n<body>\n~w</body>\n</html>",
            [HtmlHeader, HtmlBody]).
 
-render(Term, Html, CtxStyleOpts, Depth) :-
+inline_css(Meta, StyleString) :-
+    dict_pairs(Meta, _, MetaPairs),
+    foldl(render_as_css_aux_no_whitespace, MetaPairs, "", StyleString).
+
+render(Term, Html, Ctx, Depth) :-
     compound(Term),
     compound_name_arguments(Term, P, [S, NodeMeta]),
     style(P, StyleMeta),
     meta_with_inherit(StyleMeta, StyleMetaWithInherit),
     get_dict(element, StyleMetaWithInherit, Element),
-
-    style_opts(NodeMeta, CtxStyleOpts, StyleOpts),
-    
+    put_dict(NodeMeta, Ctx, CtxNew),
+    inline_css(CtxNew, CSS),
     Depth1 is Depth+1,
-    render(S, SubHtml, StyleOpts, Depth1),
+    render(S, SubHtml, CtxNew, Depth1),
     
     (get_dict(classname, StyleMetaWithInherit, ClassNameWithDots) ->
          split_string(ClassNameWithDots, ".", "", ClassNameSplitList),
          last(ClassNameSplitList, ClassName),
-         enclose_in_tags(Element, ClassName, Depth, SubHtml, Html);
-     enclose_in_tags(Element, Depth, SubHtml, Html)),
+         (CSS = "" ->
+              enclose_in_tags(Element, ClassName, Depth, SubHtml, Html), !;
+          enclose_in_tags(Element, ClassName, CSS, Depth, SubHtml, Html), !);
+     enclose_in_tags(Element, Depth, SubHtml, Html), !),
     !.
 
-render(Term, Html, CtxStyleOpts, Depth) :-
+render(Term, Html, Ctx, Depth) :-
     compound(Term),
     compound_name_arguments(Term, P, [S]),    
     compound_name_arguments(NewTerm, P, [S, _{}]),    
-    render(NewTerm, Html, CtxStyleOpts, Depth),
+    render(NewTerm, Html, Ctx, Depth),
     !.
 
 %% Lists
 render([], "", _, _) :- !.
-render([H|T], HtmlBody, CtxStyleOpts, Depth) :-
-    render(H, Acc, CtxStyleOpts, Depth),
-    render(T, HtmlBody2, CtxStyleOpts, Depth),
+render([H|T], HtmlBody, Ctx, Depth) :-
+    render(H, Acc, Ctx, Depth),
+    render(T, HtmlBody2, Ctx, Depth),
     string_concat(Acc, HtmlBody2, HtmlBody),
     !.
 
@@ -123,7 +135,7 @@ render(S, E, _, _) :-
     !.
 
 write_notes_to_html(Name) :-
-    render(Name, Html, _{}),
+    render(Name, Html),
     format(string(Filename), "resources/~w.html", [Name]),
     open(Filename, write, Stream),
     write(Stream, Html),

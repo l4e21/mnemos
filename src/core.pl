@@ -14,15 +14,14 @@ book("Simulation and Simulacra",
 
 author("Jean Baudrillard", []).
 
-
 notes("Simulation and Simulacra",
       [
           h1("The Procession of Simulacra", _{}),
           text([quote("The simulacrum is never what hides the truth -
                 it is truth that hides the fact that there is none. The
                 simulacrum is true."),
-                text("- Ecclesiastes", _{ref:["bible", "ecclesiastes"]})],
-               _{tags:["christianity"]}),
+                text("- Ecclesiastes", _{fontsize:16})],
+               _{tags:["christianity"], fontsize:14}),
           text("Coextensivity of the real and its concept is imaginary"),
           text("The real is produced from miniaturized cells, matrices, and 
 memory banks, models of control - and it can be reproduced an indefinite number of times from these. It no longer needs to be rational, because it no longer measures itself against either an ideal or negative instance. It is no longer anything but operational."),
