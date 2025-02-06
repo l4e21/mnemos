@@ -1,5 +1,8 @@
 :- module(render, [render/2, write_notes_to_html/1]).
 
+% This one is needed to resolve predicates when loading modules dynamically
+:- meta_predicate(render).
+
 %% CSS
 
 %%% Global Styles

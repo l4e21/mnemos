@@ -3,9 +3,6 @@
 :- discontiguous book/2.
 :- discontiguous notes/2.
 
-%% Remember: Predicates are Protocols
-%% Remember: We can destructure predicates to abstract arity
-
 %% Simulation and Simulacra by Jean Baudrillard
 book("Simulation and Simulacra",
      _{author:"Jean Baudrillard",
