@@ -18,7 +18,7 @@ elem_overrides("Simulation and Simulacra", _{'h1':_{color:"red"}}).
 
 notes("Simulation and Simulacra",
       [
-          h1("The Procession of Simulacra", _{}),
+          header(h1("The Procession of Simulacra", _{}), _{}),
           p([a("The simulacrum is never what hides the truth -
                 it is truth that hides the fact that there is none. The
                 simulacrum is true."),
