@@ -3,12 +3,12 @@
 %% CSS
 
 %%% Global Styles
-elem_style(h2, _{fontsize:"18px"}).
-elem_style(h1, _{color:"black"}).
-elem_style(img, _{element:"img"}).
+elem_style('h2', _{fontsize:"18px"}).
+elem_style('h1', _{color:"black"}).
+elem_style('img', _{}).
 
-class_style(".text", _{fontsize:"14px"}).
-class_style(".quote", _{fontstyles:[italics]}).
+class_style('.text', _{fontsize:"14px"}).
+class_style('.quote', _{fontstyles:[italics]}).
 
 %%% Conversion of CSS names from atoms
 css_style_atom(fontsize-V, "font-size", V).
@@ -64,25 +64,27 @@ elem_override(DocName, ElemName, ElemMeta) :-
     elem_overrides(DocName, StyleOverrides),
     get_dict(ElemName, StyleOverrides, ElemMeta).
 
-html_header_aux(DocName, ElemName, _, ElemNewName, ElemNewMeta) :-
-    atom(ElemName),
+replace_style_with_override(DocName, ElemName, _, ElemNewMeta) :-
     elem_override(DocName, ElemName, ElemNewMeta),
-    atom_string(ElemName, ElemNewName),
     !.
 
-html_header_aux(_, ElemName, ElemMeta, ElemNewName, ElemMeta) :-
-    atom_string(ElemName, ElemNewName).
+replace_style_with_override(_, _, ElemMeta, ElemMeta).
 
-html_header(DocName, HtmlHeader) :-
-    findall([StyleName, StyleMeta],
+all_styles_for_doc(DocName, StyleList) :-
+    findall(StyleName-StyleMeta,
             (elem_style(StyleName, StyleMeta);
              class_style(StyleName, StyleMeta)),
-            StyleList),
-    maplist([Style, CSS]>>(Style = [StyleOldName, StyleOldMeta],
-                           html_header_aux(DocName, StyleOldName, StyleOldMeta, StyleNewName, StyleNewMeta),
-                           render_as_css(StyleNewName, StyleNewMeta, CSS)),
+            StyleList1),
+    maplist([StyleName-StyleOldMeta, StyleName-StyleNewMeta]>>replace_style_with_override(DocName, StyleName, StyleOldMeta, StyleNewMeta),
+            StyleList1,
+            StyleList).    
+
+html_header(DocName, HtmlHeader) :-
+    all_styles_for_doc(DocName, StyleList),
+    maplist([StyleName-StyleMeta, CSS]>>render_as_css(StyleName, StyleMeta, CSS),
             StyleList,
             CSSList),
+    write(CSSList),
     foldl(string_concat, CSSList, "", StyleString),
     enclose_in_tags("style", 0, StyleString, HtmlHeader).
 
