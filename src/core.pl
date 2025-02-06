@@ -14,7 +14,7 @@ book("Simulation and Simulacra",
 
 author("Jean Baudrillard", []).
 
-elem_overrides("Simulation and Simulacra", _{h1:_{color:"red"}}).
+elem_overrides("Simulation and Simulacra", _{'h1':_{color:"red"}}).
 
 notes("Simulation and Simulacra",
       [
@@ -22,8 +22,8 @@ notes("Simulation and Simulacra",
           p([a("The simulacrum is never what hides the truth -
                 it is truth that hides the fact that there is none. The
                 simulacrum is true."),
-             a("- Ecclesiastes", _{fontsize:12})],
-               _{tags:["christianity"], fontsize:14, class: "text"}),
+             a("- Ecclesiastes", _{fontsize:"12px"})],
+               _{tags:["christianity"], class: "text"}),
           p("Coextensivity of the real and its concept is imaginary"),
           p("The real is produced from miniaturized cells, matrices, and 
 memory banks, models of control - and it can be reproduced an indefinite number of times from these. It no longer needs to be rational, because it no longer measures itself against either an ideal or negative instance. It is no longer anything but operational."),

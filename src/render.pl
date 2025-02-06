@@ -49,15 +49,16 @@ enclose_in_tags(Tag, Depth, Content, Result) :-
            "~*c<~w>\n~w~*c</~w>\n",
            [Depth, 32, Tag, Content, Depth, 32, Tag]).
 
-enclose_in_tags(Tag, Class, Depth, Content, Result) :-
+enclose_in_tags(Tag, NodeMeta, Depth, Content, Result) :-
+    (get_dict(class, NodeMeta, ClassName) ->
+         format(string(ClassString), " class=\"~w\"", [ClassName]);
+     ClassString = ""),
+    (inline_css(NodeMeta, CSS), CSS \= "" ->
+         format(string(StyleString), " style=\"~w\"", [CSS]);
+     StyleString = ""),
     format(string(Result),
-           "~*c<~w class=\"~w\">\n~w~*c</~w>\n",
-           [Depth, 32, Tag, Class, Content, Depth, 32, Tag]).
-
-enclose_in_tags(Tag, Class, StyleString, Depth, Content, Result) :-
-    format(string(Result),
-           "~*c<~w class=\"~w\" style=\"~w\">\n~w~*c</~w>\n",
-           [Depth, 32, Tag, Class, StyleString, Content, Depth, 32, Tag]).
+           "~*c<~w~w~w>\n~w~*c</~w>\n",
+           [Depth, 32, Tag, ClassString, StyleString, Content, Depth, 32, Tag]).
 
 %%% Html Header
 elem_override(DocName, ElemName, ElemMeta) :-
@@ -84,7 +85,6 @@ html_header(DocName, HtmlHeader) :-
     maplist([StyleName-StyleMeta, CSS]>>render_as_css(StyleName, StyleMeta, CSS),
             StyleList,
             CSSList),
-    write(CSSList),
     foldl(string_concat, CSSList, "", StyleString),
     enclose_in_tags("style", 0, StyleString, HtmlHeader).
 
@@ -98,8 +98,8 @@ render(Name, Html) :-
     html_header(Name, HtmlHeader),
     html_body(Nodes, HtmlBody),
     format(string(Html),
-           "<html>\n<head>\n~w</head>\n<body>\n~w</body>\n</html>",
-           [HtmlHeader, HtmlBody]).
+           "<html>\n<head>\n<title>\n~w\n</title>\n~w</head>\n<body>\n~w</body>\n</html>",
+           [Name, HtmlHeader, HtmlBody]).
 
 
 %%%% Lists
@@ -114,24 +114,14 @@ render([H|T], HtmlBody, Ctx, Depth) :-
 render(Term, Html, Ctx, Depth) :-
     %% Find element, and the metadata
     compound(Term),
-    compound_name_arguments(Term, P, [S, NodeMeta]),
-    %% elem_style(P, _),
-    atom_string(P, Element),
-
-    %% Enrich meta with context, inline the styling into stylestring
-    put_dict(NodeMeta, Ctx, CtxNew),
-    inline_css(CtxNew, CSS),
+    compound_name_arguments(Term, Element, [S, NodeMeta]),
 
     %% Render subnodes
     Depth1 is Depth+1,
-    render(S, SubHtml, CtxNew, Depth1),
+    render(S, SubHtml, Ctx, Depth1),
 
-    %% Provide class, render
-    (get_dict(class, CtxNew, ClassName) ->
-         (CSS = "" ->
-              enclose_in_tags(Element, ClassName, Depth, SubHtml, Html), !;
-          enclose_in_tags(Element, ClassName, CSS, Depth, SubHtml, Html), !);
-     enclose_in_tags(Element, Depth, SubHtml, Html), !),
+    %% Render tags
+    enclose_in_tags(Element, NodeMeta, Depth, SubHtml, Html),
     !.
 
 render(Term, Html, Ctx, Depth) :-
