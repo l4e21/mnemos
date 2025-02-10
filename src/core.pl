@@ -4,16 +4,16 @@
 :- discontiguous notes/2.
 
 %% Simulation and Simulacra by Jean Baudrillard
-book("Simulation and Simulacra",
+book(simulation_and_simulacra,
      _{author:"Jean Baudrillard",
        tags:["philosophy"],
        style:_{fontsize:14}}).
 
 author("Jean Baudrillard", []).
 
-elem_overrides("Simulation and Simulacra", _{'h1':_{color:"red"}}).
+elem_overrides(simulation_and_simulacra, _{'h1':_{color:"red"}}).
 
-notes("Simulation and Simulacra",
+notes(simulation_and_simulacra,
       [
           header(h1("The Procession of Simulacra", _{}), _{}),
           p([a("The simulacrum is never what hides the truth -
@@ -29,8 +29,8 @@ memory banks, models of control - and it can be reproduced an indefinite number 
       ]).
 
 %% Simultaneous Statistical Inference
-book("Simultaneous Statistical Inference", _{tags:["maths"]}).
-notes("Simultaneous Statistical Inference",
+book(simultaneous_statistical_inference, _{tags:["maths"]}).
+notes(simultaneous_statistical_inference,
       [
           h1("Intro"),
           p("In simultaneous statistical inference, we have less hypotheses than data-sets, I.E., a singular hypothesis may talk about multiple datasets."),

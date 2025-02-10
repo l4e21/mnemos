@@ -8,6 +8,7 @@
 %@ true.
 
 % ?- debug(http(request)).
+%@ true.
 
 % ?- shutdown_server(5000).
 
