@@ -10,32 +10,35 @@ elem_style('body', _{backgroundcolor:"#fff",
                      margin:"0",
                      padding:"0"}).
 
-elem_style('header', _{fontsize:"1.5em",
+elem_style('header', _{fontsize:"2em",
                        textalign:"center",
                        padding:"10px",
                       fontfamily:"'Tangerine', cursive"}).
 
-elem_style('h2', _{fontsize:"1.5em"}).
+elem_style('h2', _{}).
 elem_style('h1:visited', _{color:"#000"}).
 elem_style('img', _{}).
-elem_style('a', _{}).
-elem_style('a:visited', _{}).
+elem_style('a', _{color:"#000", textdecoration:"none"}).
+elem_style('a:visited', _{color:"#555"}).
 elem_style('footer', _{}).
 
 elem_style('section', _{position:"relative",
                        backgroundcolor:"rgba(255, 255, 255, 0.8)",
                        width:"80%",
-                       margin: "20px auto",
-                       padding: "10px",
-                       border: "2px dotted #000",
-                       color: "#000"}).
+                       margin:"20px auto",
+                       padding:"10px",
+                       border:"2px dotted #000",
+                       color:"#000"}).
 
 class_style('.text', _{fontsize:"1em"}).
 class_style('.quote', _{fontstyle:italics}).
 
 class_style('.dream-date', _{}).
 class_style('.dream-content', _{}).
-class_style('.dream-title', _{}).
+class_style('.dream-title', _{marginleft:"10px",
+                              fontsize:"1.5em",
+                              color:"#000",
+                             marginbottom:"10px"}).
 class_style('.dream-image', _{}).
 
 %%% Conversion of CSS names from atoms
@@ -46,6 +49,7 @@ css_style_atom(border-V, "border", V).
 css_style_atom(position-V, "position", V).
 
 css_style_atom(textalign-V, "text-align", V).
+css_style_atom(textdecoration-V, "text-decoration", V).
 
 css_style_atom(fontsize-V, "font-size", V).
 css_style_atom(fontfamily-V, "font-family", V).

@@ -16,18 +16,18 @@ elem_overrides(simulation_and_simulacra, _{'h1':_{color:"red"}}).
 notes(simulation_and_simulacra,
       [
           section([
-          header(h1("Simulation and Simulacra")),
-          h1("The Procession of Simulacra"),
-          p([a("The simulacrum is never what hides the truth -
+                         header(h1(a("Simulation and Simulacra", _{ref: "/"}))),
+                         div(a("The Procession of Simulacra"), _{class: "dream-title"}),
+                         p([a("The simulacrum is never what hides the truth -
                 it is truth that hides the fact that there is none. The
                 simulacrum is true."),
-             a("- Ecclesiastes", _{fontsize:"12px"})],
-               _{tags:["christianity"], class: "text"}),
-          p("Coextensivity of the real and its concept is imaginary"),
-          p("The real is produced from miniaturized cells, matrices, and 
+                            a("- Ecclesiastes", _{fontsize:"12px"})],
+                           _{tags:["christianity"], class: "text"}),
+                         p("Coextensivity of the real and its concept is imaginary"),
+                         p("The real is produced from miniaturized cells, matrices, and 
 memory banks, models of control - and it can be reproduced an indefinite number of times from these. It no longer needs to be rational, because it no longer measures itself against either an ideal or negative instance. It is no longer anything but operational."),
-          p("Interpretation-- The system is the point from which we produce 'reality', and as long as the system is functional, what happens in reality does not matter except in the same way that it might suck if a map is wrong"),
-          h1("The Divine Irreverence of Images")
+                         p("Interpretation-- The system is the point from which we produce 'reality', and as long as the system is functional, what happens in reality does not matter except in the same way that it might suck if a map is wrong"),
+                         div(a("The Divine Irreverence of Images"), _{class: "dream-title"})
           ])
       ]).
 
