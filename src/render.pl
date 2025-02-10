@@ -1,4 +1,4 @@
-:- module(render, [render/2, write_notes_to_html/1]).
+:- module(render, [render_notes/2, write_notes_to_html/1]).
 :- use_module(core, [notes/2, elem_overrides/2]).
 :- use_module(style, [elem_style/2, class_style/2, css_style_atom/3]).
 
@@ -28,7 +28,7 @@ meta_to_style_string(StyleMeta, StyleString) :-
 
 render_as_css(StyleName, StyleMeta, CSS) :-
     meta_to_style_string(StyleMeta, StyleString),
-    format(string(CSS), "~w {\n~w}\n", [StyleName, StyleString]).
+    format(string(CSS), "~w {\n~w}\n\n", [StyleName, StyleString]).
 
 %% HTML
 
@@ -69,8 +69,7 @@ replace_style_with_override(_, _, ElemMeta, ElemMeta).
 
 all_styles_for_doc(DocName, StyleList) :-
     findall(StyleName-StyleMeta,
-            (elem_style(StyleName, StyleMeta);
-             class_style(StyleName, StyleMeta)),
+            (class_style(StyleName, StyleMeta); elem_style(StyleName, StyleMeta)),
             StyleList1),
     maplist([StyleName-StyleOldMeta, StyleName-StyleNewMeta]>>replace_style_with_override(DocName, StyleName, StyleOldMeta, StyleNewMeta),
             StyleList1,
@@ -89,12 +88,12 @@ html_body(Nodes, HtmlBody) :-
     render(Nodes, HtmlBody, _{}, 0).
 
 %%%% Main entry for rendering notes
-render(Name, Html) :-
+render_notes(Name, Html) :-
     notes(Name, Nodes),
     html_header(Name, HtmlHeader),
     html_body(Nodes, HtmlBody),
     format(string(Html),
-           "<html>\n<head>\n<title>\n~w\n</title>\n~w</head>\n<body>\n~w</body>\n</html>",
+           "<html>\n<head>\n<link href=\"https://fonts.googleapis.com/css2?family=Tangerine&display=swap\" rel=\"stylesheet\">\n<title>\n~w\n</title>\n~w</head>\n<body>\n~w</body>\n</html>",
            [Name, HtmlHeader, HtmlBody]).
 
 
@@ -138,7 +137,7 @@ render(S, E, _, _) :-
 
 %%%% Write to file
 write_notes_to_html(Name) :-
-    render(Name, Html),
+    render_notes(Name, Html),
     format(string(Filename), "resources/~w.html", [Name]),
     open(Filename, write, Stream),
     write(Stream, Html),
