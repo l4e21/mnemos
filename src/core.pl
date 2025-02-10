@@ -3,6 +3,10 @@
 :- discontiguous book/2.
 :- discontiguous notes/2.
 
+%% We want to add notes using external data sources, etc.
+:- multifile book/2.
+:- multifile notes/2.
+
 %% Simulation and Simulacra by Jean Baudrillard
 book(simulation_and_simulacra,
      _{author:"Jean Baudrillard",

@@ -20,11 +20,12 @@ Entrypoints load.pl
 ** DONE Check out SWIPL's http/html_write for rendering
 *** Doesn't seem as well-formatted, I think will little extra effort we can do better. Since the entrypoint only requires printing/formatting, we can easily make this work.
 ** DONE Switch back to ediprolog
-** TODO Consider creating webserver to host all the html?
-*** Okay but why over just opening the html yourself? Dynamism use-cases?
-** TODO Learn more about tspy
+** DONE Html server routing
+** DONE Learn more about tspy
+** TODO Get a live-image process going
 ** TODO Consider embeddable img component
-** TODO Html server routing
+** DONE Consider creating webserver to host all the html?
+*** Okay but why over just opening the html yourself? Dynamism use-cases?
 ** TODO Start working on learning XPCE for a GUI
 ** TODO Consider embedded src component
 ** TODO Rethink custom elements (why not just classes?)

@@ -1,5 +1,9 @@
 :- module(style, [elem_style/2, class_style/2, css_style_atom/3]).
 
+:- dynamic elem_style/2.
+:- dynamic class_style/2.
+:- dynamic css_style_atom/3.
+
 %%% Global Styles
 elem_style('body', _{backgroundcolor:"#fff",
                      backgroundimage:"radial-gradient(circle, transparent 20%, #f8f8f8 20%, #f8f8f8 80%, transparent 80%, transparent),
@@ -16,6 +20,7 @@ elem_style('header', _{fontsize:"2em",
                       fontfamily:"'Tangerine', cursive"}).
 
 elem_style('h2', _{}).
+elem_style('h1', _{color:"#000"}).
 elem_style('h1:visited', _{color:"#000"}).
 elem_style('img', _{}).
 elem_style('a', _{color:"#000", textdecoration:"none"}).
