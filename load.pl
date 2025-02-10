@@ -1,4 +1,3 @@
-
 :- use_module(src/style, [elem_style/2, class_style/2, css_style_atom/3]).
 :- use_module(src/core, [notes/2, book/2, elem_overrides/2]).
 :- use_module(src/render, [render_notes/2, write_notes_to_html/1]).
@@ -35,4 +34,4 @@ read_terms(Stream, []) :-
 
 % ?- ["resources/supplement.pl"].
 
-% ?- notes(X, _).
+% ?- listing(notes).
