@@ -4,8 +4,6 @@
 :- use_module(src/server, [start_server/1, shutdown_server/1]).
 
 % ?- start_server(4000).
-%@ % Started server at http://localhost:4000/
-%@ true.
 
 % ?- debug(http(request)).
 
