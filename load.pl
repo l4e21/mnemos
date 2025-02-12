@@ -2,6 +2,7 @@
 :- use_module(src/core, [notes/2, book/2, elem_overrides/2]).
 :- use_module(src/render, [render_notes/2, write_notes_to_html/1]).
 :- use_module(src/server, [start_server/1, shutdown_server/1]).
+:- use_module(resources/supplement, []).
 
 read_file_terms(File, Terms) :-
     open(File, read, Stream),
@@ -32,8 +33,4 @@ read_terms(Stream, []) :-
 
 % ?- listing(notes/2).
 
-% ?- ["resources/supplement.pl"].
-%@ true.
-%@ true.
-
-% ?- listing(notes).
+% ?- supplement:notes(X, B).
