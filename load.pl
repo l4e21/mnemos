@@ -33,5 +33,7 @@ read_terms(Stream, []) :-
 % ?- listing(notes/2).
 
 % ?- ["resources/supplement.pl"].
+%@ true.
+%@ true.
 
 % ?- listing(notes).
