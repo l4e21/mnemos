@@ -24,16 +24,14 @@ render_page_webpage(_Doc, _Req) :-
 
 start_server(Port) :- http_server(http_dispatch, [port(Port)]).
 
-shutdown_server(Port) :- http_stop_server(Port, _).
+shutdown_server(Port) :- http_stop_server(Port, []).
 
 %% Debugging Aids
 %% https://www.swi-prolog.org/howto/http/Developing.md
 %% Sweeprolog doesn't play nicely with these (not capturing channel outputs/inputs)
 %% That is another reason to not use it!
 
-
 % ?- start_server(4000).
-%@ % Started server at http://localhost:4000/
-%@ true.
 
 % ?- shutdown_server(4000).
+

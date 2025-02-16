@@ -19,6 +19,8 @@ supplementary_files(["resources/supplements/core.pl"-"resources/supplements/core
 
 % ?- debug(http(request)).
 
+% ?- trace(shutdown_server/1).
+
 % ?- shutdown_server(4000).
 
 % ?- write_page_to_html(X).

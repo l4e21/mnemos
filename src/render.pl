@@ -24,7 +24,7 @@ render_as_css_aux_no_whitespace(_-_, Acc, Acc).
 
 meta_to_style_string(StyleMeta, StyleString) :-
     dict_pairs(StyleMeta, _, StylePairs),
-    foldl(render_as_css_aux, StylePairs, "", StyleString).    
+    foldl(render_as_css_aux, StylePairs, "", StyleString).
 
 render_as_css(StyleName, StyleMeta, CSS) :-
     meta_to_style_string(StyleMeta, StyleString),
