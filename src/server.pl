@@ -1,16 +1,22 @@
 :- module(server, [start_server/1, shutdown_server/1]).
 
-:- use_module(render, [render_notes/2]).
+:- use_module(render, [render_page/2]).
 
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 
 %% Root Handling
 % https://www.swi-prolog.org/pldoc/man?section=httpdispatch
-:- http_handler(root(notes/Doc), render_notes_page(Doc), []).
+:- http_handler(root(Doc), render_page_webpage(Doc), []).
 
-render_notes_page(Doc, _Req) :-
-    render_notes(Doc, Html),
+render_page_webpage(Doc, _Req) :-
+    render_page(Doc, Html),
+    format("Content-type: text/html~n~n"),
+    format(Html).
+
+render_page_webpage(_Doc, _Req) :-
+    render_page(404, Html),
+    format("Status: 404~n"),
     format("Content-type: text/html~n~n"),
     format(Html).
 

@@ -1,11 +1,11 @@
-:- module(core, [notes/2, book/2, elem_overrides/2]).
+:- module(core, [page/2, book/2, elem_overrides/2]).
     
 :- discontiguous book/2.
-:- discontiguous notes/2.
+:- discontiguous page/2.
 
 %% We want to add notes using external data sources, etc.
 :- multifile book/2.
-:- multifile notes/2.
+:- multifile page/2.
 
 %% Simulation and Simulacra by Jean Baudrillard
 book(simulation_and_simulacra,
@@ -17,7 +17,7 @@ author("Jean Baudrillard", []).
 
 elem_overrides(simulation_and_simulacra, _{'h1':_{color:"red"}}).
 
-notes(simulation_and_simulacra,
+page(simulation_and_simulacra,
       [
           section([
                          header(h1(a("Simulation and Simulacra", _{ref: "/"}))),
@@ -37,9 +37,11 @@ memory banks, models of control - and it can be reproduced an indefinite number 
 
 %% Simultaneous Statistical Inference
 book(simultaneous_statistical_inference, _{tags:["maths"]}).
-notes(simultaneous_statistical_inference,
+page(simultaneous_statistical_inference,
       [
           h1("Intro"),
           p("In simultaneous statistical inference, we have less hypotheses than data-sets, I.E., a singular hypothesis may talk about multiple datasets."),
           p("This can mean that in multiple comparison, a decision is not only made between H_0 and not H_0, but also between all possible combinations")
       ]).
+
+page(404, [h1("Not Found!")]).

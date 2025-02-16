@@ -22,10 +22,10 @@ Entrypoints load.pl
 ** DONE Switch back to ediprolog
 ** DONE Html server routing
 ** DONE Learn more about tspy
-** TODO Get a live-image process going
-** TODO Consider embeddable img component
+** DONE Get a live-image process going
 ** DONE Consider creating webserver to host all the html?
-*** Okay but why over just opening the html yourself? Dynamism use-cases?
+** TODO Encrypt/Decrypt supplementary pages
+** TODO Consider embeddable img component
 ** TODO Start working on learning XPCE for a GUI
 ** TODO Consider embedded src component
 ** TODO Rethink custom elements (why not just classes?)

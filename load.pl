@@ -1,20 +1,17 @@
-:- use_module(src/style, [elem_style/2, class_style/2, css_style_atom/3]).
-:- use_module(src/core, [notes/2, book/2, elem_overrides/2]).
-:- use_module(src/render, [render_notes/2, write_notes_to_html/1]).
+
+:- use_module(src/core, [page/2, book/2, elem_overrides/2]).
+:- use_module(src/encryption, [encrypt_files/2, decrypt_files/2, mnemos_aes_key/1]).
+:- use_module(src/render, [render_page/2, write_page_to_html/1]).
 :- use_module(src/server, [start_server/1, shutdown_server/1]).
+:- use_module(src/style, [elem_style/2, class_style/2, css_style_atom/3]).
 
-read_file_terms(File, Terms) :-
-    open(File, read, Stream),
-    read_terms(Stream, Terms),
-    close(Stream).
+supplementary_files(["resources/core_supplement.pl"-"resources/core_supplement.enc"]) :- !.
 
-read_terms(Stream, [Term | Terms]) :-
-    read(Stream, Term),
-    Term \= end_of_file,
-    read_terms(Stream, Terms).
+% ?- setenv('MNEMOS_AES_KEY', "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").
+%@ true.
 
-read_terms(Stream, []) :-
-    at_end_of_stream(Stream).
+% ?- supplementary_files(Xs), mnemos_aes_key(Key), encrypt_files(Key, Xs).
+% ?- supplementary_files(Xs), mnemos_aes_key(Key), decrypt_files(Key, Xs).
 
 % ?- start_server(4000).
 
@@ -22,16 +19,15 @@ read_terms(Stream, []) :-
 
 % ?- shutdown_server(4000).
 
-% ?- write_notes_to_html(X).
+% ?- write_page_to_html(X).
 
-% ?- render_notes_page(simulation_and_simulacra, _).
+% ?- render_page(simulation_and_simulacra, _).
 
 % ?- trace(read/2).
 
 % ?- read_file_terms("resources/supplement.pl", Terms).
 
-% ?- listing(notes/2).
+% ?- listing(page/2).
 
-% ?- ["resources/supplement.pl"].
+% ?- ["resources/core_supplement.pl"].
 
-% ?- listing(notes).

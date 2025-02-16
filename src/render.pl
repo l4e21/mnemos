@@ -1,5 +1,5 @@
-:- module(render, [render_notes/2, write_notes_to_html/1]).
-:- use_module(core, [notes/2, elem_overrides/2]).
+:- module(render, [render_page/2, write_page_to_html/1]).
+:- use_module(core, [page/2, elem_overrides/2]).
 :- use_module(style, [elem_style/2, class_style/2, css_style_atom/3]).
 
 
@@ -83,19 +83,19 @@ html_header(DocName, HtmlHeader) :-
     foldl(string_concat, CSSList, "", StyleString),
     enclose_in_tags("style", 0, StyleString, HtmlHeader).
 
+    
 %%% Body
 html_body(Nodes, HtmlBody) :-
     render(Nodes, HtmlBody, _{}, 0).
 
-%%%% Main entry for rendering notes
-render_notes(Name, Html) :-
-    notes(Name, Nodes),
+%%%% Main entry for rendering pages
+render_page(Name, Html) :-
+    page(Name, Nodes),
     html_header(Name, HtmlHeader),
     html_body(Nodes, HtmlBody),
     format(string(Html),
            "<html>\n<head>\n<link href=\"https://fonts.googleapis.com/css2?family=Tangerine&display=swap\" rel=\"stylesheet\">\n<title>\n~w\n</title>\n~w</head>\n<body>\n~w</body>\n</html>",
            [Name, HtmlHeader, HtmlBody]).
-
 
 %%%% Lists
 render([], "", _, _) :- !.
@@ -136,11 +136,11 @@ render(S, E, _, _) :-
     !.
 
 %%%% Write to file
-write_notes_to_html(Name) :-
-    render_notes(Name, Html),
+write_page_to_html(Name) :-
+    render_page(Name, Html),
     format(string(Filename), "resources/~w.html", [Name]),
     open(Filename, write, Stream),
     write(Stream, Html),
     close(Stream).
 
-% ?- write_notes_to_html(X).
+% ?- write_page_to_html(X).
