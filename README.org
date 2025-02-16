@@ -5,28 +5,53 @@ Entrypoints is load.pl. Ediprolog strongly recommended due to the example-driven
 
 * TODO-LIST
  Consider embedded src component
+ 
  Start working on learning XPCE for a GUI
+
  Rethink custom elements (why not just classes and custom render logic?)
+
  String parsing, contextual vals
 
 * Done
  Get PROLOG to produce html from notes
+
  Consider Unit Tests
- Consider whether I need to do a message-passing system: I separate GUI logic from knowledge representation and stick to explicit predicates. PROLOG is already extremely flexible so I don't think I'll be losing too much, especially given I'm probably keeping a lot of this stuff static.
+
+ Consider whether I need to do a message-passing system: I separate GUI logic f
+
+ rom knowledge representation and stick to explicit predicates. PROLOG is already extremely flexible so I don't think I'll be losing too much, especially given I'm probably keeping a lot of this stuff static.
+
  Consider ref component further
+
  Add CSS headers
+
  Come up with a better string formatting solution
+
  Consider Modules
+
  Add depth-based indentation
+
  Abstract node-specific rendering and have basic rendering for nodes
- Consider interfaces & inheritance: Certain protocols will need to check if the interface is implemented first.
+
+ Consider interfaces & inheritance: Certain protocols will need to check if the i
+ nterface is implemented first.
+
  Add inline styles
+
  Rethink doc-level overrides
+
  Check out SWIPL's http/html_write for rendering: Doesn't seem as well-formatted, I think will little extra effort we can do better. Since the entrypoint only requires printing/formatting, we can easily make this work.
+
  Switch back to ediprolog
+
  Html server routing
+
  Learn more about tspy
+
  Get a live-image process going
+
  Consider creating webserver to host all the html?
+
  Encrypt/Decrypt supplementary pages
+
  Consider embeddable img component
