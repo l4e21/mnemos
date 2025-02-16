@@ -1,5 +1,7 @@
 
-Entrypoints load.pl
+This is an extensible expert knowledge base for Prolog. It provides: A webserver, customized html templating, support for encryption/decryption (AES-256), etc.
+
+Entrypoints is load.pl. Ediprolog strongly recommended due to the example-driven approach.
 
 * TODO-LIST
 
@@ -24,9 +26,9 @@ Entrypoints load.pl
 ** DONE Learn more about tspy
 ** DONE Get a live-image process going
 ** DONE Consider creating webserver to host all the html?
-** TODO Encrypt/Decrypt supplementary pages
-** TODO Consider embeddable img component
-** TODO Start working on learning XPCE for a GUI
+** DONE Encrypt/Decrypt supplementary pages
+** DONE Consider embeddable img component
 ** TODO Consider embedded src component
-** TODO Rethink custom elements (why not just classes?)
+** TODO Start working on learning XPCE for a GUI
+** TODO Rethink custom elements (why not just classes and custom render logic?)
 ** TODO String parsing, contextual vals

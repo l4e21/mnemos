@@ -42,6 +42,6 @@ decrypt_files(Key, Xs) :-
 
 % ?- setenv('MNEMOS_AES_KEY', "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").
 
-% ?- mnemos_aes_key(Key), encrypt_files(Key, ["../resources/core_supplementtest.pl"-"../resources/core_supplement.enc"]).
+% ?- mnemos_aes_key(Key), encrypt_files(Key, ["../resources/supplements/coretest.pl"-"../resources/supplements/core.enc"]).
 
-% ?- mnemos_aes_key(Key), decrypt_files(Key, ["../resources/core_supplementtest.pl"-"../resources/core_supplement.enc"]).
+% ?- mnemos_aes_key(Key), decrypt_files(Key, ["../resources/supplements/coretest.pl"-"../resources/supplements/core.enc"]).

@@ -44,12 +44,14 @@ class_style('.dream-title', _{marginleft:"10px",
                               fontsize:"1.5em",
                               color:"#000",
                              marginbottom:"10px"}).
-class_style('.dream-image', _{}).
+class_style('.dream-image', _{width:"100px",
+                              height:"100px"}).
 
 %%% Conversion of CSS names from atoms
 css_style_atom(margin-V, "margin", V).
 css_style_atom(padding-V, "padding", V).
 css_style_atom(width-V, "width", V).
+css_style_atom(height-V, "height", V).
 css_style_atom(border-V, "border", V).
 css_style_atom(position-V, "position", V).
 

@@ -2,11 +2,13 @@
 
 :- use_module(render, [render_page/2]).
 
+:- use_module(library(http/http_files)).
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 
 %% Root Handling
 % https://www.swi-prolog.org/pldoc/man?section=httpdispatch
+:- http_handler(root('static/'), http_reply_from_files('resources/static/', []), [prefix]).
 :- http_handler(root(Doc), render_page_webpage(Doc), []).
 
 render_page_webpage(Doc, _Req) :-

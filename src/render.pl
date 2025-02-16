@@ -37,12 +37,7 @@ inline_css(Meta, StyleString) :-
     dict_pairs(Meta, _, MetaPairs),
     foldl(render_as_css_aux_no_whitespace, MetaPairs, "", StyleString).
 
-enclose_in_tags(Tag, Depth, Content, Result) :-
-    format(string(Result),
-           "~*c<~w>\n~w~*c</~w>\n",
-           [Depth, 32, Tag, Content, Depth, 32, Tag]).
-
-enclose_in_tags(Tag, NodeMeta, Depth, Content, Result) :-
+tag_metastring(NodeMeta, MetaString) :-
     (get_dict(class, NodeMeta, ClassName) ->
          format(string(ClassString), " class=\"~w\"", [ClassName]);
      ClassString = ""),
@@ -52,9 +47,22 @@ enclose_in_tags(Tag, NodeMeta, Depth, Content, Result) :-
     (get_dict(ref, NodeMeta, HRef) ->
          format(string(HRefString), " href=\"~w\"", [HRef]);
      HRefString = ""),
+    (get_dict(src, NodeMeta, Src) ->
+         format(string(SrcString), " src=\"~w\"", [Src]);
+     SrcString = ""),
+    format(string(MetaString), "~w~w~w~w", [ClassString, StyleString, HRefString, SrcString]).
+    
+enclose_in_tags(Tag, NodeMeta, Depth, Content, Result) :-
+    tag_metastring(NodeMeta, MetaString),
     format(string(Result),
-           "~*c<~w~w~w~w>\n~w~*c</~w>\n",
-           [Depth, 32, Tag, ClassString, StyleString, HRefString, Content, Depth, 32, Tag]).
+           "~*c<~w~w>\n~w~*c</~w>\n",
+           [Depth, 32, Tag, MetaString, Content, Depth, 32, Tag]).
+
+tag_no_content(Tag, NodeMeta, Depth, Result) :-
+    tag_metastring(NodeMeta, MetaString),
+    format(string(Result),
+           "~*c<~w~w/>\n",
+           [Depth, 32, Tag, MetaString]).
 
 %%% Html Header
 elem_override(DocName, ElemName, ElemMeta) :-
@@ -81,7 +89,7 @@ html_header(DocName, HtmlHeader) :-
             StyleList,
             CSSList),
     foldl(string_concat, CSSList, "", StyleString),
-    enclose_in_tags("style", 0, StyleString, HtmlHeader).
+    enclose_in_tags("style", _{}, 0, StyleString, HtmlHeader).
 
     
 %%% Body
@@ -111,12 +119,12 @@ render(Term, Html, Ctx, Depth) :-
     compound(Term),
     compound_name_arguments(Term, Element, [S, NodeMeta]),
 
-    %% Render subnodes
-    Depth1 is Depth+1,
-    render(S, SubHtml, Ctx, Depth1),
-
-    %% Render tags
-    enclose_in_tags(Element, NodeMeta, Depth, SubHtml, Html),
+    %% Render tags: If no content, render the tag
+    %% Otherwise, Render subnodes
+    (S = "" -> tag_no_content(Element, NodeMeta, Depth, Html);
+     Depth1 is Depth+1,
+     render(S, SubHtml, Ctx, Depth1),
+     enclose_in_tags(Element, NodeMeta, Depth, SubHtml, Html)),
     !.
 
 render(Term, Html, Ctx, Depth) :-
@@ -138,7 +146,7 @@ render(S, E, _, _) :-
 %%%% Write to file
 write_page_to_html(Name) :-
     render_page(Name, Html),
-    format(string(Filename), "resources/~w.html", [Name]),
+    format(string(Filename), "resources/generated/~w.html", [Name]),
     open(Filename, write, Stream),
     write(Stream, Html),
     close(Stream).
