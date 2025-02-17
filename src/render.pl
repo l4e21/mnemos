@@ -1,7 +1,6 @@
 :- module(render, [render_page/2, write_page_to_html/1]).
-:- use_module(core, [page/2, elem_overrides/2]).
-:- use_module(style, [elem_style/2, class_style/2, css_style_atom/3]).
-
+:- use_module(core, [page/2]).
+:- use_module(style, [css_style_atom/3, styles/2]).
 
 % This one is needed to resolve predicates when loading modules dynamically
 :- meta_predicate(render).
@@ -65,23 +64,13 @@ tag_no_content(Tag, NodeMeta, Depth, Result) :-
            [Depth, 32, Tag, MetaString]).
 
 %%% Html Header
-elem_override(DocName, ElemName, ElemMeta) :-
-    elem_overrides(DocName, StyleOverrides),
-    get_dict(ElemName, StyleOverrides, ElemMeta).
-
-replace_style_with_override(DocName, ElemName, _, ElemNewMeta) :-
-    elem_override(DocName, ElemName, ElemNewMeta),
-    !.
-
-replace_style_with_override(_, _, ElemMeta, ElemMeta).
-
 all_styles_for_doc(DocName, StyleList) :-
-    findall(StyleName-StyleMeta,
-            (class_style(StyleName, StyleMeta); elem_style(StyleName, StyleMeta)),
-            StyleList1),
-    maplist([StyleName-StyleOldMeta, StyleName-StyleNewMeta]>>replace_style_with_override(DocName, StyleName, StyleOldMeta, StyleNewMeta),
-            StyleList1,
-            StyleList).    
+    styles(DocName, _{classes:ClassStyles, elements:ElemStyles}),
+    !,
+    put_dict(ClassStyles, ElemStyles, StyleDict),
+    dict_pairs(StyleDict, _, StyleList).
+
+all_styles_for_doc(_, StyleList) :- all_styles_for_doc(default, StyleList).
 
 html_header(DocName, HtmlHeader) :-
     all_styles_for_doc(DocName, StyleList),

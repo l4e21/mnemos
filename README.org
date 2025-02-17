@@ -7,11 +7,9 @@ Entrypoints is load.pl. Ediprolog strongly recommended due to the example-driven
  
  Start working on learning XPCE for a GUI
 
+* Done
  Rethink custom elements (why not just classes and custom render logic?)
 
- String parsing, contextual vals
-
-* Done
  Get PROLOG to produce html from notes
 
  Consider Unit Tests

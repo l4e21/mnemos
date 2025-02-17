@@ -1,22 +1,11 @@
-:- module(core, [page/2, book/2, elem_overrides/2]).
+:- module(core, [page/2]).
     
-:- discontiguous book/2.
 :- discontiguous page/2.
-
 %% We want to add notes using external data sources, etc.
-:- multifile book/2.
+
 :- multifile page/2.
 
 %% Simulation and Simulacra by Jean Baudrillard
-book(simulation_and_simulacra,
-     _{author:"Jean Baudrillard",
-       tags:["philosophy"],
-       style:_{fontsize:14}}).
-
-author("Jean Baudrillard", []).
-
-elem_overrides(simulation_and_simulacra, _{'h1':_{color:"red"}}).
-
 page(simulation_and_simulacra,
       [
           section([
@@ -36,7 +25,6 @@ memory banks, models of control - and it can be reproduced an indefinite number 
       ]).
 
 %% Simultaneous Statistical Inference
-book(simultaneous_statistical_inference, _{tags:["maths"]}).
 page(simultaneous_statistical_inference,
       [
           h1("Intro"),
