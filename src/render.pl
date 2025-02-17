@@ -114,6 +114,7 @@ render([H|T], HtmlBody, Ctx, Depth) :-
     !.
 
 %%%% Nodes
+
 render(Term, Html, Ctx, Depth) :-
     %% Find element, and the metadata
     compound(Term),
@@ -129,10 +130,11 @@ render(Term, Html, Ctx, Depth) :-
 
 render(Term, Html, Ctx, Depth) :-
     compound(Term),
-    compound_name_arguments(Term, P, [S]),    
-    compound_name_arguments(NewTerm, P, [S, _{}]),
+    compound_name_arguments(Term, Element, [S]),    
+    compound_name_arguments(NewTerm, Element, [S, _{}]),
     render(NewTerm, Html, Ctx, Depth),
     !.
+    
 
 %%%% Basic strings
 render(S, SS, _, _) :- string(S), string_concat(S, "\n", SS), !.

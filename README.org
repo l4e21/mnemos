@@ -4,7 +4,6 @@ This is an extensible expert knowledge base for Prolog. It provides: A webserver
 Entrypoints is load.pl. Ediprolog strongly recommended due to the example-driven approach.
 
 * TODO-LIST
- Consider embedded src component
  
  Start working on learning XPCE for a GUI
 
@@ -55,3 +54,5 @@ Entrypoints is load.pl. Ediprolog strongly recommended due to the example-driven
  Encrypt/Decrypt supplementary pages
 
  Consider embeddable img component
+
+ String parsing, contextual vals, consider embedded src: There's actually no need for this since prolog will bind any logic from the body of the clause to the head!
