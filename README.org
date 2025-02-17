@@ -5,7 +5,8 @@ Entrypoints is load.pl. Ediprolog strongly recommended due to the example-driven
 
 * TODO-LIST
  
- Start working on learning XPCE for a GUI
+ Start working on learning XPCE for a localised GUI
+ New HTTP endpoints that do more interesting things (listing pages by given tags, searching for elems by tags on a page, etc)
 
 * Done
  Rethink custom elements (why not just classes and custom render logic?)

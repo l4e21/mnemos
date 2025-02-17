@@ -1,8 +1,6 @@
 :- module(core, [page/2]).
     
 :- discontiguous page/2.
-%% We want to add notes using external data sources, etc.
-
 :- multifile page/2.
 
 %% Simulation and Simulacra by Jean Baudrillard
@@ -19,7 +17,7 @@ page(simulation_and_simulacra,
                          p("Coextensivity of the real and its concept is imaginary"),
                          p("The real is produced from miniaturized cells, matrices, and 
 memory banks, models of control - and it can be reproduced an indefinite number of times from these. It no longer needs to be rational, because it no longer measures itself against either an ideal or negative instance. It is no longer anything but operational."),
-                         p("Interpretation-- The system is the point from which we produce 'reality', and as long as the system is functional, what happens in reality does not matter except in the same way that it might suck if a map is wrong"),
+                         p("Interpretation-- The system is the point from which we produce 'reality', and as long as the system is functional, what happens in reality does not matter, except for purposes of orientation."),
                          div(a("The Divine Irreverence of Images"), _{class: "dream-title"})
           ])
       ]).

@@ -91,7 +91,7 @@ render_page(Name, Html) :-
     html_header(Name, HtmlHeader),
     html_body(Nodes, HtmlBody),
     format(string(Html),
-           "<html>\n<head>\n<link href=\"https://fonts.googleapis.com/css2?family=Tangerine&display=swap\" rel=\"stylesheet\">\n<title>\n~w\n</title>\n~w</head>\n<body>\n~w</body>\n</html>",
+           "<html>\n<head>\n<meta charset=\"UTF-8\">\n<link href=\"https://fonts.googleapis.com/css2?family=Tangerine&display=swap\" rel=\"stylesheet\">\n<title>\n~w\n</title>\n~w</head>\n<body>\n~w</body>\n</html>",
            [Name, HtmlHeader, HtmlBody]).
 
 %%%% Lists

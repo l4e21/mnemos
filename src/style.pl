@@ -1,5 +1,8 @@
 :- module(style, [css_style_atom/3, styles/2]).
 
+:- discontiguous styles/2.
+:- multifile styles/2.
+
 styles(default, _{classes: _{'.dream-title': _{marginleft:"10px",
                                                             fontsize:"1.5em",
                                                             color:"#000",

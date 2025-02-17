@@ -4,7 +4,8 @@
 :- use_module(src/server, [start_server/1, shutdown_server/1]).
 :- use_module(src/style, [css_style_atom/3, styles/2]).
 
-supplementary_files(["resources/supplements/core.pl"-"resources/supplements/core.enc"]) :- !.
+supplementary_files(["resources/supplements/core.pl"-"resources/supplements/core.enc",
+                     "resources/supplements/style.pl"-"resources/supplements/style.enc"]) :- !.
 
 % ?- setenv('MNEMOS_AES_KEY', "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").
 
@@ -12,7 +13,7 @@ supplementary_files(["resources/supplements/core.pl"-"resources/supplements/core
 
 % ?- supplementary_files(Xs), mnemos_aes_key(Key), decrypt_files(Key, Xs).
 
-% ?- ["resources/supplements/core.pl"].
+% ?- ["resources/supplements/core.pl", "resources/supplements/style.pl"].
 
 % ?- start_server(4000).
 
